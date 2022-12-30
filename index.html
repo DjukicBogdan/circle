@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="main" id="main"></div>
+    </div>
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        @keyframes anim {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(359deg);
+            }
+        }
+
+        @keyframes opaci {
+            0% {
+                opacity: 10%;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            margin: auto;
+            align-items: center;
+        }
+
+        .main {
+            position: relative;
+            border-radius: 50%;
+            height: 300px;
+            width: 300px;
+        }
+
+        .circle-container {
+            position: absolute;
+            left: calc(50% - 75px);
+            top: calc(50% - 75px);
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+        }
+
+        .circle-container2 {
+            height: 150px;
+            width: 150px;
+            border: 1px solid darkgrey;
+            border-radius: 50%;
+            animation: anim 5s infinite linear;
+        }
+
+        .circle-container3 {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+        }
+
+        .circle {
+            position: absolute;
+            left: calc(50% - 40px);
+            top: 0;
+            height: 13px;
+            width: 13px;
+            border-radius: 50%;
+            opacity: 100% !important;
+            z-index: 100;
+        }
+    </style>
+    <script>
+        let count2 = 1;
+        startAnim();
+        setInterval(startAnim, 5000);
+
+        function startAnim() {
+            let mainEl = document.getElementById("main");
+            const size = 50;
+            count2 *= 2;
+            if (count2 > 36) {
+                count2 = 36;
+                clearInterval("startAnim");
+            }
+
+            const NumberOfCircles = count2;
+            const rotateSize = 360 / NumberOfCircles;
+            let colorStep = Math.floor(255 / NumberOfCircles);
+            while (mainEl.children.length > 0) {
+                    for (let i = 0; i < mainEl.children.length; i++) {
+                        mainEl.lastChild.remove();
+                    }
+                }
+            for (let index = 0; index < NumberOfCircles; index++) {
+                const circleContainer = document.createElement("div");
+                const circleContainer2 = document.createElement("div");
+                const circleContainer3 = document.createElement("div");
+                const circle = document.createElement("div");
+                circleContainer.classList.add("circle-container");
+                circleContainer2.classList.add("circle-container2");
+                circleContainer3.classList.add("circle-container3");
+                circle.classList.add("circle");
+                // circleContainer3.style.animation = "opaci 5s linear";
+                colorStep = Math.floor((index +1) * (NumberOfCircles * (index+1)) % 360);
+                circle.style.backgroundColor = "hsl(" + Math.floor(colorStep) + ",100%,50%)";
+                circleContainer.style.transform = "rotate(" + (rotateSize * index) + "deg) translate(" + (size) + "px)";
+
+                circleContainer3.style.transform = "rotate(" + (
+                    (Math.floor(rotateSize / NumberOfCircles) - rotateSize * index) - (index * rotateSize) 
+                ) + "deg)";
+
+                circleContainer2.appendChild(circle);
+                circleContainer3.appendChild(circleContainer2);
+                circleContainer.appendChild(circleContainer3);
+                mainEl.appendChild(circleContainer);
+            }
+            if (count2 == 36) {
+                count2 = 1;
+            }
+        }
+
+    </script>
+</body>
+
+</html>
